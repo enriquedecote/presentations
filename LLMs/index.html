@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/black.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+	<link rel="stylesheet" href="plugin/reveal-pointer/pointer.css" />
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<style> 
+:root {
+	--r-main-font: "FiraCode Nerd Font";
+	--r-main-font-size: 1em;
+} 
+.reveal .hljs {min-height: 50%;} slides
+</style>
+
+<img src="Hypergrowth/publish/assets/hypergrowth.png" alt="" style="object-fit: scale-down">
+
+Enrique Munoz de Cote
+
+PhD in computer science
+| what            |     | where       |
+| --------------- | --- | ----------- |
+| Director of ML  | @   | Secondmind  |
+| Founder         | @   | People & AI |
+| Co-founder, CTO | @   | Geckomatics |
+| Co-founder, CTO | @   | Hypergrowth            |
+
+enrique@hypergrowth.io
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## What are LLMs and how do they work?
+is a type of machine learning model designed to process and understand human language
+- based on NN architectures
+- trained on vast amounts of text data
+- learns patterns and relationships between words, phrases and sentences
+
+<img src="https://www.researchgate.net/publication/337533434/figure/fig1/AS:829406142550016@1574757242811/The-basic-ANN-architecture-Neuron-is-the-smallest-processing-component-of-the-ANN.jpg" alt="The basic ANN architecture. Neuron is the smallest processing component...  | Download Scientific Diagram" style="width: Download Scientific Diagrampx; object-fit: fill">
+</div>
+
+<aside class="notes"><ul>
+<li>LLMs work by breaking down input text into small, discrete units called tokens<ul>
+<li>typically individual words or sub-words</li>
+<li>processed by a series of layers in the model</li>
+<li>each will apply mathematical operations to transform input into higher-level representation</li>
+<li>this higher level representation will capture most abstract information about the text</li>
+</ul>
+</li>
+<li>Output<ul>
+<li>a probability distribution over outputs</li>
+<li>likelihood that a given sentence is a good continuation of a previous sentence</li>
+<li>answer to a question</li>
+<li>uses a softmax function to transform output of previous layer into set of probabilities</li>
+</ul>
+</li>
+</ul>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Timeline of LLMs
+-   Statisical Language Modeling (SLM)
+-   Neural Language Models (NLM)
+-   Pretrained Language Models (PLM): ELMo, [BERT](https://wandb.ai/mukilan/BERT_Sentiment_Analysis/reports/An-Introduction-to-BERT-And-How-To-Use-It--VmlldzoyNTIyOTA1), BART, [GPT-2](https://wandb.ai/bkkaggle/lm-finetuning/reports/Pretraining-a-124-M-Parameter-GPT-2-Language-Model--VmlldzoyMjg4NzA)
+-   Large Language Models (LLM): larger PLMs like [GPT-4](https://wandb.ai/telidavies/ml-news/reports/OpenAI-Announces-GPT-4--VmlldzozNzg1MDkz), ChatGPT, [PaLM](https://wandb.ai/onlineinference/ml-news/reports/Google-AI-Introduces-PaLM-The-Pathways-Language-Model--VmlldzoxNzk0MjU4), Sparrow, Claude, Microsoft 365's AI, etc
+</div>
+
+<aside class="notes"><ul>
+<li>Statisical Language Modeling (SLM): methods from the 1990s where a simple n-gram model predicts the next word based on recent context (Markov assumption)</li>
+<li>Neural Language Models (NLM): use neural networks like RNNs, LSTMs, GRUs, word2vec</li>
+<li>Pretrained Language Models (PLM): ELMo, <a href="https://wandb.ai/mukilan/BERT_Sentiment_Analysis/reports/An-Introduction-to-BERT-And-How-To-Use-It--VmlldzoyNTIyOTA1">BERT</a>, BART, <a href="https://wandb.ai/bkkaggle/lm-finetuning/reports/Pretraining-a-124-M-Parameter-GPT-2-Language-Model--VmlldzoyMjg4NzA">GPT-2</a></li>
+<li>Large Language Models (LLM): larger PLMs like <a href="https://wandb.ai/telidavies/ml-news/reports/OpenAI-Announces-GPT-4--VmlldzozNzg1MDkz">GPT-4</a>, ChatGPT, <a href="https://wandb.ai/onlineinference/ml-news/reports/Google-AI-Introduces-PaLM-The-Pathways-Language-Model--VmlldzoxNzk0MjU4">PaLM</a>, Sparrow, Claude, Microsoft 365&#39;s AI, etc</li>
+</ul>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Examples of different LLMs (including chatGPT)
+| Model Name   | Parameters     | Open Source | API Access                  | Developer          |
+| ------------ | -------------- | ----------- | --------------------------- | ------------------ |
+| ChatGPT      | 20 billion     | No          | Yes                         | OpenAI             |
+| BloombergGPT | 50 billion     | No          | Yes                         | Bloomberg                   |
+| BLOOM        | 176 billion    | Yes         | Yes                         | BigScience         |
+| LaMDA        | 173 billion    | No          | No                          | Google             |
+| MT-NLG       | 530 billion    | No          | Yes                         | Nvidia / Microsoft |
+| LLaMA        | Multiple Sizes | Yes          | Downloadable by application | Meta AI            |
+| GPT-4        | 1 trillion     | No          | Unknown                     | OpenAI             |
+
+<img src="https://api.wandb.ai/files/vincenttu/images/projects/37228380/5a69d608.png" alt="" style="object-fit: scale-down">
+</div></script></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## LLM resources
+- Running your own models
+- Accessing via APIs
+- Common datasets
+- Library resources
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### Running Your Own Models
+
+LLMs don't have a strict cut-off in terms of parameter count. It is usually around the 10B parameter range.
+
+For models with tens of billions of parameters, consider mT5, T0, GPT-NeoX-20B, CodeGen, UL2, [Flan-T5](https://wandb.ai/onlineinference/flan/reports/Google-Bakes-A-FLAN-Improved-Zero-Shot-Learning-For-NLP--VmlldzoxMDE0MDEx), mT0, PanGu-α, and [LLaMA](https://wandb.ai/vincenttu/blog_posts/reports/Meta-AI-Released-LLaMA--VmlldzozNjM5MTAz).
+
+For models with hundreds of billions of parameters, consider [OPT](https://wandb.ai/telidavies/ml-news/reports/OPT-IML-Meta-Releases-New-Instruction-Tuned-OPT-Models-NLP-Task-Benchmark--VmlldzozMjAzMzc1), [BLOOM](https://wandb.ai/telidavies/ml-news/reports/BLOOM-176-Billion-Parameter-Multilingual-Language-Model-Ready-For-Open-Use--VmlldzoyMzA2NTgz), and [BLOOMZ](https://wandb.ai/telidavies/ml-news/reports/BLOOMZ-MT0-BigScience-Releases-New-Finetuned-Large-Language-Models--VmlldzoyOTEzMzU3).
+
+It's important to measure the FLOPS (floating point operations per second) to see how much compute/memory is needed for these models.
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### Accessing via APIs
+
+OpenAI has released the ChatGPT API and they also provide a web-based interface for interacting with their GPT models. [HuggingFace](https://wandb.ai/fully-connected/blog/hugging-face) also has a model registry in which you can download model weights, use their inference endpoints, or even just query in the browser.
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### Common datasets
+-   Books
+    -   BookCorpus
+    -   Project Gutenberg
+    -   Books1 and Books2
+-   CommonCrawl
+    -   C4 (and its variants)
+    -   CC-Stories
+    -   CC-News
+    -   RealNews
+-   Reddit Links
+    -   WebText and/or OpenWebText
+    -   PushShift.io
+-   Wikipedia
+-   Code
+    -   GitHub
+    -   Stack Overflow
+    -   Google BigQuery dataset
+-   Others
+    -   The Pile
+    -   ROOTS
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### Library Resources
+
+-   Hugging Face Transformers lets you easily access, train, and use hundreds of models
+-   PyTorch DeepSpeed developed by Microsoft is a DL optimization library
+-   Megatron-LM developed by NVIDIA provides an array of optimization techniques for training LLMs
+-   [JAX](https://wandb.ai/fully-connected/blog/jax) is a relatively new ML library developed by Google Brain
+-   Colossal-AI developed by EleutherAI is for training LLMs
+-   The paper lists a few more!
+</div></script></section></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Common tasks
+- Conditional language generation
+
+notes:
+- conditional language generation: QA, summarization
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Pre-training
+<img src="https://api.wandb.ai/files/vincenttu/images/projects/37228380/6b391e8e.png" alt="" style="object-fit: scale-down">
+
+a data pipeline
+</div></script></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Costs
+Models such as GPT-3 and Gopher costs millions of dollars to train from scratch and requires huge amounts of compute resources. 
+- training a 1.5 billion parameter model (2 orders of magnitude smaller than the state of the art at the time) at $1.6 million. 
+- Advances in software and hardware have brought the cost substantially down, with a 2023 paper reporting a cost in the hundreds of thousands of dollars to train a 12 billion parameter model.
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### Alpaca
+- Stanford retrained a LLaMA model 
+- behaves qualitatively similar to OpenAI text-davinci-003
+- small
+- cheap $600 USD
+
+notes:
+- how? by cheaply fine-tuning it on inputs and outputs from text-davinci-003
+- what does this mean? if you allow any sufficiently wide-ranging access to your AI model, you're giving away the crown jewels to anyone to nearly clone your model without the hard work
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### Alpaca deep dive
+<img src="https://miro.medium.com/v2/resize:fit:1400/0*shRs2mKTYacOpg9N.jpg" alt="Meet Dolly: How Databricks Finetuned a Two-Year-Old LLM to Follow  Instructions like ChatGPT | by Jesus Rodriguez | Apr, 2023 | Towards AI" style="width: by Jesus Rodriguez px; object-fit: fill">
+
+- recruited GPT3.5 to train a meta model
+	- used a self instruct process
+	- GPT3.5 creates 52k examples
+- Used the weakest of the LLaMA models (7B parameters)
+	- retrained it using the 52K examples
+	- took 3 hrs!!
+	- (this step) costed less than $100USD!!! 🤣 🤯
+
+notes:
+- it was using the weakest of the LLaMA models 
+	- could have used the larger 65B parameters one
+- wasn't trained using the best trainer (GPT-4) at a similar cost
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### Self instruct
+<img src="https://pbs.twimg.com/media/Fk6PvvjXoAApiv0.jpg" alt="" style="object-fit: scale-down">
+
+notes:
+- start with human made examples of exemplar prompts and outputs
+- fed into the model
+- ask to generate 1000s of new instances
+- filter good and bad
+- put good back into the language model
+- goes back into the feedback loop
+- one advanced model (GPT3.5) teaching another
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## LLMs as decision support systems
+A decision support system (DSS) is a computer-based information system that is designed to support decision-making activities within an organization or enterprise. It uses data, models, algorithms, and analytical tools to help users make more informed and effective decisions.
+
+- Can be used in different contexts: business, finance, healthcare, and government
+- Components: data storage, data analysis, and user interface.
+
+ Key features:
+ - process large amounts of data quickly
+ - present information in a meaningful way
+ - support collaboration and communication among decision-makers
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### Example use cases where LMMs can support decision making
+1.  Customer service
+2.  Education
+3.  Healthcare
+4.  Finance
+5.  Marketing
+
+notes:
+1.  Customer service: ChatGPT can be used to provide personalized customer support and help customers resolve issues quickly and efficiently. By analyzing customer inquiries and providing automated responses, ChatGPT can reduce wait times and improve the customer experience.
+2.  Education: ChatGPT can be used to provide personalized learning experiences for students. By analyzing student performance data and providing recommendations on study materials and learning strategies, ChatGPT can help students achieve better academic outcomes.
+3.  Healthcare: ChatGPT can be used to provide medical diagnosis and treatment recommendations. By analyzing patient symptoms and medical records, ChatGPT can provide healthcare professionals with real-time insights that can help them make more informed decisions.
+4.  Finance: ChatGPT can be used to provide financial advice and investment recommendations. By analyzing market trends and financial data, ChatGPT can provide personalized recommendations that can help individuals make better financial decisions.
+5.  Marketing: ChatGPT can be used to analyze customer behavior and provide personalized marketing recommendations. By analyzing customer data and providing insights on buying patterns and preferences, ChatGPT can help businesses develop more effective marketing strategies.
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### Business cases
+ChatGPT can be a useful decision support system in any business case that involves processing large amounts of data and making informed decisions based on that data. It can help businesses save time and money by automating routine tasks and providing real-time insights into complex problems.
+1.  Customer service
+2.  Market research
+3.  Human resources
+4.  Financial analysis
+5.  Supply chain management
+
+notes:
+1.  Customer service: ChatGPT can be used to provide 24/7 customer support. By integrating it with a company's website or mobile app, ChatGPT can answer customer queries in real-time, provide product recommendations, and guide customers through the purchase process.
+2.  Market research: ChatGPT can be used to analyze customer feedback and sentiment to help identify trends and patterns in the market. By understanding customer needs and preferences, businesses can make more informed decisions about product development and marketing strategies.
+3.  Human resources: ChatGPT can be used to support the HR department by assisting in the recruitment process. It can help screen and filter job applicants, provide information about job openings, and answer questions about company policies and procedures.
+4.  Financial analysis: ChatGPT can be used to provide real-time financial analysis by monitoring key financial indicators and generating reports. It can also assist in forecasting and risk analysis to help businesses make more informed financial decisions.
+5.  Supply chain management: ChatGPT can be used to optimize the supply chain by monitoring inventory levels, forecasting demand, and identifying potential bottlenecks or issues. This can help businesses make more informed decisions about inventory management, logistics, and purchasing.
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Recommender systems
+💭Imagine you had a dataset of
+- customer preferences
+- purchasing behaviours
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+Here's a simple pipeline using LLMs as a recommender system 
+1.  Collect data
+2.  Preprocess the data
+3.  Train the model
+4.  Test the model
+5.  Integrate with product placement
+6.  Monitor and update
+
+notes:
+1.  Collect data: Gather data about customer preferences, demographics, purchasing history, and product feedback. This data can be collected from customer surveys, online reviews, and other sources.
+2.  Preprocess the data: Clean and preprocess the data by removing duplicates, missing values, and outliers. Normalize the data to ensure that all features are on the same scale.
+3.  Train the model: Train ChatGPT on the preprocessed data using supervised learning algorithms. The model should learn to predict the likelihood of a customer purchasing a product based on their preferences and purchasing behavior.
+4.  Test the model: Evaluate the performance of the model on a test set. The model should be able to accurately predict the products that a customer is likely to purchase based on their preferences.
+5.  Integrate with product placement: Once the model is trained and tested, it can be integrated into the product placement process. When a customer is browsing a website or a physical store, the model can recommend products that are likely to be of interest to them based on their preferences and purchasing behavior.
+6.  Monitor and update: Monitor the performance of the recommender system over time and update the model as new data becomes available. This will help ensure that the model continues to make accurate recommendations as customer preferences and purchasing behavior change.
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### SEO optimisation
+- Keyword research
+- Content optimisation
+- Meta descriptions and titles
+- Competitor analysis
+- Voice search optimisation
+
+notes:
+- Keyword research: ChatGPT can be trained on a large corpus of text to generate relevant keywords and phrases for a given topic. This can be useful for identifying high-traffic keywords to target in SEO campaigns.
+- Content optimization: analyze the content on a website and suggest changes to optimize it for search engines. For example, the model can recommend adding more relevant keywords to the content, improving the readability of the content, or adding links to other relevant pages.
+- Meta descriptions and titles:  generate compelling meta descriptions and titles that accurately reflect the content of a page. This can help improve click-through rates and increase visibility in search engine results pages.
+- Competitor analysis: trained on data about competitors in a particular industry to identify the keywords and strategies they are using to rank well in search engines. This can help businesses develop their own SEO strategies to compete effectively.
+- Voice search optimization: generate conversational language and long-tail keyword phrases that are more likely to be used in voice search queries. This can help businesses optimize their content for voice search and capture more traffic from this growing segment of the market.
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+### LLMs and consulting
+- Analysing **customer feedback** to identify key trends and insights
+- Generating natural language **reports and summaries**
+- **Predicting** customer behaviour and preferences based on text data
+- Developing **chatbots** and **virtual assistants** to improve customer service
+</div></script></section></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+# Section 3: Challenges and Considerations for Using LLMs
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 700px; width: 960px; min-height: 700px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+## Conclusions
+- LLMs perform quite well in open and closed-book QA settings (knowledge utilisation). 
+- Hallucination is the main issue. 
+	- Intrinsic hallucination is generated information from the LLM that conflicts with the existing source.
+	- Extrinsic hallucination is generated information that cannot be verified.
+</div></script></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/menu/menu.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+	<script src="plugin/reveal-pointer/pointer.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+		  RevealMenu,
+	      RevealPointer,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+				{id: 'toggle-overview',
+				title: 'Toggle overview (O)',
+				icon: '<i class="fa fa-th"></i>',
+				action: 'Reveal.toggleOverview();'
+				},
+			]
+		},
+		menu: {
+			loadIcons: false
+		}
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":960,"height":700,"margin":0.04,"controls":true,"progress":true,"slideNumber":false,"transition":"convex","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>
