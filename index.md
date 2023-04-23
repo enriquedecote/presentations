@@ -4,6 +4,7 @@
 
 layout: home
 ---
+
 |Venue | Date | Title |
 | --- | --- | --- |
 |KPMG UK | 20 April, 2023 | [AI and decision making solutions](./LLMs/index.html)|
